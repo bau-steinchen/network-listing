@@ -6,7 +6,7 @@ class BorderBoxLayout(BoxLayout):
     def __init__(self, **kwargs):
         super(BorderBoxLayout, self).__init__(**kwargs)
         with self.canvas.before:
-            Color(1, 1, 0, 1)  # Farbe des Rahmens (schwarz)
+            Color(.3, .3, .3, 1)  # Farbe des Rahmens (schwarz)
             self.rect = Rectangle(size=self.size, pos=self.pos)
         self.bind(size=self._update_rect, pos=self._update_rect)
 
