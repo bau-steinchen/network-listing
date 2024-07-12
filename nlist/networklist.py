@@ -11,24 +11,18 @@ import json
 
 from gui.kivy import GUI
 
+from helper.tool import Tool
+
 ##########################################################################
 # main 
 ##########################################################################
 def main():
-    with open('nlist', 'r') as f:
-        data = json.load(f)
-    # print (data['config'])
-    # handle config file
-    conf = data['config']
-    if not os.path.exists(conf):
-        with open(conf, 'w') as datei:
-            datei.write('') 
-
+    
+    conf = Tool().get_config_location()
+    # print(conf)
 
     # create an run gui loop
     GUI(default_config=conf).run()
-
-
 
 ###########################################################################
 # entry point

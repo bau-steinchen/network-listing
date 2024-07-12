@@ -1,0 +1,102 @@
+{
+    "network": {
+        "ip": "192.168.178.0",
+        "mask": 24
+    },
+    "devices": [
+        {
+            "name": "at-at",
+            "descriptions": "main hardware server with proxmox installed",
+            "ip": "192.168.178.50",
+            "os": "proxmoox ve 8",
+            "type": "server"
+        },
+        {
+            "name": "at-st",
+            "descriptions": "additional server with more power for future uses",
+            "ip": "192.168.178.51",
+            "os": "proxmox ve 8",
+            "type": "server"
+        },
+        {
+            "name": "mongodb",
+            "descriptions": "mongodb for my lunastation game and website blogs",
+            "ip": "192.168.178.60",
+            "os": "debian-10",
+            "tunnel": "",
+            "type": "lxc"
+        },
+        {
+            "name": "homepage",
+            "descriptions": "homepage for my personal use",
+            "ip": "192.168.178.61",
+            "os": "debian-12",
+            "tunnel": "page.ristein.eu",
+            "type": "lxc"
+        },
+        {
+            "name": "game-api",
+            "descriptions": "my api for all data needed by lunastation",
+            "ip": "192.168.178.62",
+            "os": "debian-12",
+            "tunnel": "lunastation.ristein.eu",
+            "type": "lxc"
+        },
+        {
+            "name": "pi-hole",
+            "descriptions": "small pi hole project to block ads",
+            "ip": "192.168.178.63",
+            "os": "debian-12",
+            "tunnel": "",
+            "type": "lxc"
+        },
+        {
+            "name": "nextcloud",
+            "descriptions": "the new nextcloud service moved away from raspy",
+            "ip": "192.168.178.64",
+            "os": "debian-12",
+            "tunnel": "nextcloud.ristein.eu",
+            "type": "lxc"
+        },
+        {
+            "name": "paperngx",
+            "descriptions": "document management system",
+            "ip": "192.168.178.65",
+            "os": "debian-12",
+            "tunnel": "paper.ristein.eu",
+            "type": "lxc"
+        },
+        {
+            "name": "openhab",
+            "descriptions": "LXC container for running the smart home operating",
+            "ip": "192.168.178.66",
+            "os": "debian-12",
+            "tunnel": "",
+            "type": "lxc"
+        },
+        {
+            "name": "mqtt",
+            "descriptions": "LXC container for running and mqtt broker",
+            "ip": "192.168.178.67",
+            "os": "debian-12",
+            "tunnel": "",
+            "type": "lxc"
+        },
+        {
+            "name": "influxdb",
+            "descriptions": "LXC container for running and influxdb",
+            "ip": "192.168.178.68",
+            "os": "debian-12",
+            "tunnel": "",
+            "type": "lxc"
+        },
+        {
+            "name": "grafana",
+            "descriptions": "LXC container for running grafana",
+            "ip": "192.168.178.69",
+            "os": "debian-12",
+            "tunnel": "",
+            "type": "lxc"
+        } 
+    ]
+}  

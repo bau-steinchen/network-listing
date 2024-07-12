@@ -11,8 +11,15 @@ from kivy.core.window import Window
 from kivy.properties import StringProperty, BooleanProperty
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.popup import Popup
+from kivy.uix.spinner import Spinner
+from kivy.clock import Clock
 
 from helper.border import BorderBoxLayout
+from network.network import Network
+from network.NetworkHandler import NetworkHandler
+
+import os
+import threading
 
 
 class SelectableLabel(RecycleDataViewBehavior, Label):
@@ -67,6 +74,7 @@ class GUI(App):
         
         # top list bar so scanning
         list_bar = BoxLayout(orientation='vertical')
+        self.list_bar = list_bar
         config_bar = BoxLayout(size_hint_y=None, height=30)
         config_name = Label(text='Configfile:')
         self.config_name = config_name
@@ -83,7 +91,7 @@ class GUI(App):
         list_layout = BoxLayout(orientation='vertical', padding=10, spacing=10, size_hint_y=None)
         list_layout.bind(minimum_height=list_layout.setter('height'))
         self.list_layout = list_layout
-        self.populate_networklist()
+        # self.populate_networklist()
         
 
         scrollview.add_widget(list_layout)
@@ -123,20 +131,29 @@ class GUI(App):
         # self.name_label.text = 'Scannen gedrückt'
         # Beispielhaftes Hinzufügen eines Elements zur Liste
         # self.item_list.data.append({'text': 'New Item'})
+        self.populate_networklist()
         print('Scannen button clicked')
 
     def populate_networklist(self):
-        # print("populate Network list")
-        # if self.network_devices != None and len(self.network_devices) > 0:
-            # for device in len(self.network_devices):
-        for device in range(20):
-            item = BorderBoxLayout(orientation='vertical', size_hint_y=None, height=60)
-            dns = Label(text=f"util_terrasse", size_hint_y=None, height=28)
-            ip = Label(text=f"192.168.178.170", size_hint_y=None, height=28)
-            item.add_widget(dns)
-            item.add_widget(ip)
+        self.list_layout.clear_widgets()
+        self.network = Network(self.default_config)
+
+        for device in self.network.network['devices']:
+            item = BorderBoxLayout(orientation='horizontal', size_hint_y=None, height=60)
+            name = Button(text=f"Name: {device['name']}\nIP: {device['ip']}")
+            name.bind(on_press=lambda instance: self.show_data(device))
+            active = Label(text="Status", size_hint_x=None, width=60)
+            if self.get_device_status(device):
+                active.text = "Online"
+            else:
+                active.text = "Offline"
+            item.add_widget(name)
+            item.add_widget(active)
 
             self.list_layout.add_widget(item)
+            self.config_file.text = self.config_name
+
+        
     
     def show_configfile_chooser(self, instance):
         file_selector_layout = BoxLayout(orientation='vertical')
@@ -149,10 +166,13 @@ class GUI(App):
         popup = Popup(title="File Chooser", content=file_selector_layout, size_hint=(0.9, 0.9))
 
         def select_file(instance):
+            
             selected_file = file_chooser.selection
+            
             if selected_file:
-                if selected_file[0].endswith(".json"):
-                    self.config_file.text = f"{selected_file[0]}"
+                if selected_file[0].endswith(".json"):  
+                    self.config_file.text = f"Loading..."
+                    self.config_name = os.path.basename(selected_file[0])
                     self.default_config = selected_file[0]
                 else:
                     print("No valid config File selected!")
@@ -160,7 +180,18 @@ class GUI(App):
                 # self.config_name.text = "No file selected."
                 print("No file selected using default!")
             popup.dismiss()
+            Clock.schedule_once(lambda dt: self.populate_networklist(), 1)
+            # self.populate_networklist()
+            
 
         select_button.bind(on_press=select_file)
 
         popup.open()
+
+    def show_data(self, device):
+        print("show data for device: ")
+        print(device)
+
+    def get_device_status(self, device):
+        device_ip = device['ip']
+        return NetworkHandler().check_device_status(device_ip)
