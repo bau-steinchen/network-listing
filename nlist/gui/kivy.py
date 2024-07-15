@@ -173,6 +173,7 @@ class GUI(App):
                 if selected_file[0].endswith(".json"):  
                     self.config_file.text = f"Loading..."
                     self.config_name = os.path.basename(selected_file[0])
+                    print(os.path.basename(selected_file[0]))
                     self.default_config = selected_file[0]
                 else:
                     print("No valid config File selected!")
