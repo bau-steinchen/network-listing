@@ -92,6 +92,7 @@ class GUI(App):
         list_layout.bind(minimum_height=list_layout.setter('height'))
         self.list_layout = list_layout
         # self.populate_networklist()
+        update_button = Button(text='Update', size_hint_y=None, height=30, on_press=self.on_update)
         
 
         scrollview.add_widget(list_layout)
@@ -102,6 +103,7 @@ class GUI(App):
 
         left_layout.add_widget(scan_button)
         left_layout.add_widget(list_bar)
+        left_layout.add_widget(update_button)
 
         # Rechter Bereich (2/3)
         right_layout = BoxLayout(orientation='vertical', size_hint_x=0.67)
@@ -127,12 +129,10 @@ class GUI(App):
         return root
     
     def on_scan(self, instance):
-        # Hier wird die Logik für das Scannen implementiert
-        # self.name_label.text = 'Scannen gedrückt'
-        # Beispielhaftes Hinzufügen eines Elements zur Liste
-        # self.item_list.data.append({'text': 'New Item'})
-        self.populate_networklist()
         print('Scannen button clicked')
+
+    def on_update(self, instance):
+        self.populate_networklist()
 
     def populate_networklist(self):
         self.list_layout.clear_widgets()
@@ -141,7 +141,7 @@ class GUI(App):
         for device in self.network.network['devices']:
             item = BorderBoxLayout(orientation='horizontal', size_hint_y=None, height=60)
             name = Button(text=f"Name: {device['name']}\nIP: {device['ip']}")
-            name.bind(on_press=lambda instance: self.show_data(device))
+            name.bind(on_press=lambda instance: self.on_device_clicked(device))
             active = Label(text="Status", size_hint_x=None, width=60)
             if self.get_device_status(device):
                 active.text = "Online"
@@ -151,7 +151,7 @@ class GUI(App):
             item.add_widget(active)
 
             self.list_layout.add_widget(item)
-            self.config_file.text = self.config_name
+            self.config_file.text = self.default_config
 
         
     
@@ -188,7 +188,7 @@ class GUI(App):
 
         popup.open()
 
-    def show_data(self, device):
+    def on_device_clicked(self, device):
         print("show data for device: ")
         print(device)
 
